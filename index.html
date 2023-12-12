@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Part 2 Weather</title>
+    <style>
+        output, span, img {
+            font-family: monospace;
+            display: flex;
+            font-size: 2rem;
+            margin: 4rem;
+        }
+    </style>
+  </head>
+  <body>
+    <h1>Current Weather</h1>
+    <img src="">
+    <span id="conditions">&nbsp;</span>
+    <output>&nbsp;</output>
+    
+    <form>
+        <button type="button">Get Weather</button>
+    </form>
+	<script type="module">
+
+        const outputWeather = document.querySelector('output');
+        const outputConditions = document.querySelector('span');
+        const button = document.querySelector('button');
+        const image = document.querySelector('img');
+
+        button.addEventListener('click', () => {
+            fetch('https://api.weather.gov/gridpoints/SGX/54,20/forecast')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    outputWeather.textContent = data.properties.periods[0].temperature + '\u00B0F' ;
+                    outputConditions.textContent = data.properties.periods[0].shortForecast;
+                    if (data.properties.periods[0].shortForecast.search('fog') != 1) {
+                        image.src = 'fog.png';
+                    } else if (data.properties.periods[0].shortForecast.search('cloudy') != 1) {
+                        image.src = 'cloudy.png';
+                    } else {
+                        image.src = 'sunny.png';
+                    }
+                })
+                .catch(error => {
+                    console.error('fetch error:', error);
+                    outputWeather.textContent = 'Error fetching';
+                });
+        });
+
+
+    </script>
+    <noscript>
+        <span id="message">Current Weather conditions Unavailable</span>
+    </noscript>
+  </body>
+</html>
