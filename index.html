@@ -41,9 +41,9 @@
                 .then(data => {
                     outputWeather.textContent = data.properties.periods[0].temperature + '\u00B0F' ;
                     outputConditions.textContent = data.properties.periods[0].shortForecast;
-                    if (data.properties.periods[0].shortForecast.search('fog') != 1) {
+                    if (data.properties.periods[0].shortForecast.search('fog') != -1) {
                         image.src = 'fog.png';
-                    } else if (data.properties.periods[0].shortForecast.search('cloudy') != 1) {
+                    } else if (data.properties.periods[0].shortForecast.search('cloudy') != -1) {
                         image.src = 'cloudy.png';
                     } else {
                         image.src = 'sunny.png';
